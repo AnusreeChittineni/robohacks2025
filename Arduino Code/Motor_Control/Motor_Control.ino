@@ -60,110 +60,138 @@ void loop() {
         }
 
         if (onGround) {
-            // drive forward
             if (comm == 'W') {
-                digitalWrite(FRwheelPin1, HIGH);
-                digitalWrite(FRwheelPin2, LOW);
-
-                digitalWrite(FLwheelPin1, HIGH);
-                digitalWrite(FLwheelPin2, LOW);
-
-                digitalWrite(BRwheelPin1, HIGH);
-                digitalWrite(BRwheelPin2, LOW);
-
-                digitalWrite(BLwheelPin1, HIGH);
-                digitalWrite(BLwheelPin2, LOW);
-            // drive right
+                goForward();
             } else if (comm = 'A') {
-                digitalWrite(FRwheelPin1, LOW);
-                digitalWrite(FRwheelPin2, HIGH);
-
-                digitalWrite(FLwheelPin1, HIGH);
-                digitalWrite(FLwheelPin2, LOW);
-
-                digitalWrite(BRwheelPin1, HIGH);
-                digitalWrite(BRwheelPin2, LOW);
-
-                digitalWrite(BLwheelPin1, LOW);
-                digitalWrite(BLwheelPin2, HIGH);
-            // drive backward
+                goRight();
             } else if (comm = 'B') {
-                digitalWrite(FRwheelPin1, LOW);
-                digitalWrite(FRwheelPin2, HIGH);
-
-                digitalWrite(FLwheelPin1, LOW);
-                digitalWrite(FLwheelPin2, HIGH);
-
-                digitalWrite(BRwheelPin1, LOW);
-                digitalWrite(BRwheelPin2, HIGH);
-
-                digitalWrite(BLwheelPin1, LOW);
-                digitalWrite(BLwheelPin2, HIGH);
-            // drive left
+                goBackward();
             } else if (comm = 'L') {
-                digitalWrite(FRwheelPin1, HIGH);
-                digitalWrite(FRwheelPin2, LOW);
-
-                digitalWrite(FLwheelPin1, LOW);
-                digitalWrite(FLwheelPin2, HIGH);
-
-                digitalWrite(BRwheelPin1, LOW);
-                digitalWrite(BRwheelPin2, HIGH);
-
-                digitalWrite(BLwheelPin1, HIGH);
-                digitalWrite(BLwheelPin2, LOW);
-            // rotate counterclockwise
+                goLeft();
             } else if (comm = 'H') {
-                digitalWrite(FRwheelPin1, LOW);
-                digitalWrite(FRwheelPin2, HIGH);
-
-                digitalWrite(FLwheelPin1, HIGH);
-                digitalWrite(FLwheelPin2, LOW);
-
-                digitalWrite(BRwheelPin1, LOW);
-                digitalWrite(BRwheelPin2, HIGH);
-
-                digitalWrite(BLwheelPin1, HIGH);
-                digitalWrite(BLwheelPin2, LOW);
-            // rotate clockwse
+                rotateCCW();
             } else if (comm = 'J') {
-                digitalWrite(FRwheelPin1, HIGH);
-                digitalWrite(FRwheelPin2, LOW);
-
-                digitalWrite(FLwheelPin1, LOW);
-                digitalWrite(FLwheelPin2, HIGH);
-
-                digitalWrite(BRwheelPin1, HIGH);
-                digitalWrite(BRwheelPin2, LOW);
-
-                digitalWrite(BLwheelPin1, LOW);
-                digitalWrite(BLwheelPin2, HIGH);
+                rotateCW();
             }
         } else {
-            // move up
             if (comm == 'U') {
-                digitalWrite(GearPin1, HIGH);
-                digitalWrite(GearPin2, LOW);
-            // move down
+                goUp();
             } else if (comm == 'D') {
-                digitalWrite(GearPin1, LOW);
-                digitalWrite(GearPin2, HIGH);
+                goDown();
             }
         }
     } else { // if no command is being sent, stop all motion
-        digitalWrite(FRwheelPin1, LOW);
-        digitalWrite(FRwheelPin2, LOW);
-
-        digitalWrite(FLwheelPin1, LOW);
-        digitalWrite(FLwheelPin2, LOW);
-
-        digitalWrite(BRwheelPin1, LOW);
-        digitalWrite(BRwheelPin2, LOW);
-
-        digitalWrite(BLwheelPin1, LOW);
-        digitalWrite(BLwheelPin2, LOW);
-        
-        digitalWrite(GearPin1, LOW);
-        digitalWrite(GearPin2, LOW);
+        breakAll();
     }
+}
+
+void goForward() {
+    digitalWrite(FRwheelPin1, HIGH);
+    digitalWrite(FRwheelPin2, LOW);
+
+    digitalWrite(FLwheelPin1, HIGH);
+    digitalWrite(FLwheelPin2, LOW);
+
+    digitalWrite(BRwheelPin1, HIGH);
+    digitalWrite(BRwheelPin2, LOW);
+
+    digitalWrite(BLwheelPin1, HIGH);
+    digitalWrite(BLwheelPin2, LOW);
+}
+
+void goBackward() {
+    digitalWrite(FRwheelPin1, LOW);
+    digitalWrite(FRwheelPin2, HIGH);
+
+    digitalWrite(FLwheelPin1, LOW);
+    digitalWrite(FLwheelPin2, HIGH);
+
+    digitalWrite(BRwheelPin1, LOW);
+    digitalWrite(BRwheelPin2, HIGH);
+
+    digitalWrite(BLwheelPin1, LOW);
+    digitalWrite(BLwheelPin2, HIGH);
+}
+
+void goLeft() {
+    digitalWrite(FRwheelPin1, HIGH);
+    digitalWrite(FRwheelPin2, LOW);
+
+    digitalWrite(FLwheelPin1, LOW);
+    digitalWrite(FLwheelPin2, HIGH);
+
+    digitalWrite(BRwheelPin1, LOW);
+    digitalWrite(BRwheelPin2, HIGH);
+
+    digitalWrite(BLwheelPin1, HIGH);
+    digitalWrite(BLwheelPin2, LOW);
+}
+
+void goRight() {
+    digitalWrite(FRwheelPin1, LOW);
+    digitalWrite(FRwheelPin2, HIGH);
+
+    digitalWrite(FLwheelPin1, HIGH);
+    digitalWrite(FLwheelPin2, LOW);
+
+    digitalWrite(BRwheelPin1, HIGH);
+    digitalWrite(BRwheelPin2, LOW);
+
+    digitalWrite(BLwheelPin1, LOW);
+    digitalWrite(BLwheelPin2, HIGH);
+}
+
+void rotateCW() {
+    digitalWrite(FRwheelPin1, HIGH);
+    digitalWrite(FRwheelPin2, LOW);
+
+    digitalWrite(FLwheelPin1, LOW);
+    digitalWrite(FLwheelPin2, HIGH);
+
+    digitalWrite(BRwheelPin1, HIGH);
+    digitalWrite(BRwheelPin2, LOW);
+
+    digitalWrite(BLwheelPin1, LOW);
+    digitalWrite(BLwheelPin2, HIGH);
+}
+
+void rotateCCW() {
+    digitalWrite(FRwheelPin1, LOW);
+    digitalWrite(FRwheelPin2, HIGH);
+
+    digitalWrite(FLwheelPin1, HIGH);
+    digitalWrite(FLwheelPin2, LOW);
+
+    digitalWrite(BRwheelPin1, LOW);
+    digitalWrite(BRwheelPin2, HIGH);
+
+    digitalWrite(BLwheelPin1, HIGH);
+    digitalWrite(BLwheelPin2, LOW);
+}
+
+void goUp() {
+    digitalWrite(GearPin1, HIGH);
+    digitalWrite(GearPin2, LOW);
+}
+
+void goDown() {
+    digitalWrite(GearPin1, LOW);
+    digitalWrite(GearPin2, HIGH);
+}
+
+void breakAll() {
+    digitalWrite(FRwheelPin1, HIGH);
+    digitalWrite(FRwheelPin2, HIGH);
+
+    digitalWrite(FLwheelPin1, HIGH);
+    digitalWrite(FLwheelPin2, HIGH);
+
+    digitalWrite(BRwheelPin1, HIGH);
+    digitalWrite(BRwheelPin2, HIGH);
+
+    digitalWrite(BLwheelPin1, HIGH);
+    digitalWrite(BLwheelPin2, HIGH);
+    
+    digitalWrite(GearPin1, HIGH);
+    digitalWrite(GearPin2, HIGH);
 }

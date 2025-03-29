@@ -42,6 +42,9 @@ def detect_rail(img_frame, grayscale):
     else:
         return (0, False) 
 
+def detect_bin(img_frame, grayscale):
+
+    # returns vertical distance to barcode in tuple (negative if below robot, positive if above)
 
 def detect_barcode(img_frame, target_barcode, on_rail):
 
@@ -57,12 +60,11 @@ def detect_barcode(img_frame, target_barcode, on_rail):
         if barcode_data == target_barcode:
             # send an indication to the serial port
             if on_rail:
-                detect_rail(img_frame, gray)
-            
-            return True
+                return detect_rail(img_frame, gray)
+            else:
+                return (detect_bin(img_frame, gray), True)
 
-    return False
-            
+    return (None, False)
 
 def capture_image(cap):
     # cap = cv2.VideoCapture(0)  # Open the default camera

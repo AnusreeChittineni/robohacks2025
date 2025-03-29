@@ -27,10 +27,13 @@ import raspberry_pi.camera as camera # capture_image(target_barcode), detect_bar
 class Robot():
     def __init__(self):
         self.lockedDistance = 3
+        self.lineUpThreshold = 5
+        self.driftThreshold = 20
+        self.heightThreshold = 0.5
 
         self.onRail = False
-        self.target_barcode = 0
-        self.target_shelf_height = 0
+        self.target_shelf_barcode = 0
+        self.target_bin_barcode = 0
         self.camera = 0
 
         self.ser = serial.Serial("/dev/ttyACM0", 115200, timeout=1)
@@ -39,8 +42,8 @@ class Robot():
         self.ser.setDTR(True)
 
     def define_goal(self, asin):
-        self.target_barcode = asin["shelf_barcode"]
-        self.target_shelf_height = asin["shelf_height"]
+        self.target_shelf_barcode = asin["shelf_barcode"]
+        self.target_bin_barcode = asin["bin_barcode"]
 
     def move_to_goal(self):
         self.camera = cv2.VideoCapture(0)
@@ -57,45 +60,66 @@ class Robot():
         while True:
             frame = camera.capture_image(self.camera)
             cv2.imshow('Camera Feed', frame)
-            hypotenuse = camera.detect_barcode(frame, self.target_barcode, self.onRail)
-            vertical_distance = sonar.get_distance("front")
-            horizontal_distance = np.sqrt(hypotenuse*hypotenuse - vertical_distance*vertical_distance)
-            if (abs(horizontal_distance) > 5):
+            hypotenuse = camera.detect_barcode(frame, self.target_shelf_barcode, self.onRail)
 
-                # detect a drift
-                if (abs(vertical_distance - prev_vertical_distance) > self.driftThreshold):
-                    if (vertical_distance > prev_vertical_distance):
-                        self.ser.write(b'H')
+            if hypotenuse[1]:
+                lateral_distance = sonar.get_distance("front")
+                horizontal_distance = np.sqrt(hypotenuse[0]*hypotenuse[0] - lateral_distance*lateral_distance)
+                if (abs(horizontal_distance) > self.lineUpThreshold):
+
+                    # detect a drift, for demo purposes this will not be used
+                    # if (abs(lateral_distance - prev_lateral_distance) > self.driftThreshold):
+                    #     if (lateral_distance > prev_lateral_distance):
+                    #         self.ser.write(b'H')
+                    #     else:
+                    #         self.ser.write(b'J')
+                    if (hypotenuse > 0):
+                        self.ser.write(b'W')
                     else:
-                        self.ser.write(b'J')
-                if (hypotenuse > 0):
-                    self.ser.write(b'L')
+                        self.ser.write(b'B')
                 else:
-                    self.ser.write(b'A')
+                    break
+                prev_lateral_distance = lateral_distance
             else:
-                break
-
-            prev_vertical_distance = vertical_distance
+                self.ser.write(b'W')
         
         # lock in to rail
         while(True):
-            distance = sonar.get_distance("front")
+            distance = sonar("front")
             if (distance > self.lockedDistance):
-                self.ser.write(b'W')
+                self.ser.write(b'L')
             else:
                 break
 
         self.ser.write(b'E')
 
     def rail_search(self):
-        while True:
-            
+        self.ser.write(b'S')
+        self.ser.write(b'G')
 
-def __name__ == "__main__":
+        # move to shelf
+        while True:
+            frame = camera.capture_image(self.camera)
+            cv2.imshow('Camera Feed', frame)
+            vertical_distance =  camera.detect_barcode(frame, self.target_bin_barcode, self.onRail)
+
+            if (vertical_distance[1]):
+                if (abs(vertical_distance) < self.heightThreshold):
+                    break
+                elif (vertical_distance > 0):
+                    self.ser.write(b'D')
+                else:
+                    self.ser.write(b'U')
+            else:
+                self.ser.write(b'U')
+
+        self.ser.write(b'E')
+
+if __name__ == "__main__":
     rob1 = Robot()
     asin = {
         "shelf_barcode" : 0,
-        "shelf_height" : 0
+        "bin_barcode" : 0
     }
     rob1.define_goal(asin)
     rob1.move_to_goal()
