@@ -17,4 +17,24 @@ time.sleep(2)
 
 # ser.write(b'S')
 
-while True:
+class Robot():
+    def __init__(self):
+        onGround
+        detectedRail
+        
+
+        pass
+    def define_goal(self, asin):
+        pass
+    def move(self):
+
+
+def __name__ == "__main__":
+    rob1 = Robot()
+    asin = {
+        barcode = 0;
+
+    }
+
+
+
