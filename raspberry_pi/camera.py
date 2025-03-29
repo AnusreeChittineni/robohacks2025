@@ -5,7 +5,7 @@ from pyzbar.pyzbar import decode
 # we are assuming no boxes are the same width as the rail
 KNOWN_WIDTH = 5.715  # 2.25 inches in cm
 CAMERA_TO_GEAR = 6.6 # distance from camera to gear in cm
-FOCAL_LENGTH = # camera dependent value
+FOCAL_LENGTH = .36 # camera dependent value
 
 def detect_rail(img_frame, grayscale):
     # apply gaussian blur to reduce small noise
@@ -40,9 +40,10 @@ def detect_rail(img_frame, grayscale):
         return (distance, True)
 
     else:
-        return (0, False)
+        return (0, False) 
 
-def detect_barcode(img_frame, target_barcode, on_rail):
+
+def detect_barcode(img_frame, target_barcode, on_rail, at_shelf):
 
      # convert the image to grayscale for better barcode detection
     gray = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY)
