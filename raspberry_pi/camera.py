@@ -43,19 +43,29 @@ def detect_rail(img_frame, grayscale):
         return (0, False) 
 
 
-def detect_barcode(img_frame, grayscale, target_barcode):
-    barcodes = decode(grayscale)
+def detect_barcode(img_frame, target_barcode, on_rail):
+
+     # convert the image to grayscale for better barcode detection
+    gray = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY)
+
+    barcodes = decode(gray)
 
     for barcode in barcodes:
+        # corresponding barcode string
         barcode_data = barcode.data.decode('utf-8')
 
         if barcode_data == target_barcode:
             # send an indication to the serial port
-            detect_rail(img_frame, grayscale)
+            if on_rail:
+                detect_rail(img_frame, gray)
+            
+            return True
 
+    return False
+            
 
-def capture_image(target_barcode):
-    cap = cv2.VideoCapture(0)  # Open the default camera
+def capture_image(cap):
+    # cap = cv2.VideoCapture(0)  # Open the default camera
 
     while True: 
         ret, frame = cap.read()
@@ -63,18 +73,15 @@ def capture_image(target_barcode):
             print("Camera failed to capture image")
             break
 
-        # convert the image to grayscale for better barcode detection
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-        detect_barcode(frame, gray, target_barcode)
-        
+        return frame
+               
         # camera exits if 'q' is pressed
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        #if cv2.waitKey(1) & 0xFF == ord('q'):
+           #break
 
     # clean up the camera
-    cap.release()
-    cv2.destroyAllWindows()
+    #cap.release()
+    #cv2.destroyAllWindows()
             
 
 
