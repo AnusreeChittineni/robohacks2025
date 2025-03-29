@@ -1,9 +1,9 @@
 import serial
 import time
 
-import raspberry_pi.sonar as sonar # get_distance()
+import raspberry_pi.sonar as sonar # get_distance(sensor)
 
-import optic_flow_lidar
+import raspberry_pi.camera as camera # capture_image(target_barcode)
 
 # initalize a serial communication connection
 ser = serial.Serial("/dev/ttyACM0", 115200, timeout=1)
@@ -14,5 +14,7 @@ time.sleep(3)
 ser.flushInput()
 ser.setDTR(True)
 time.sleep(2)
+
+# ser.write(b'S')
 
 while True:
