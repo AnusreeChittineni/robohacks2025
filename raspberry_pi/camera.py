@@ -55,11 +55,12 @@ def detect_barcode(img_frame, target_barcode, on_rail, at_shelf):
         barcode_data = barcode.data.decode('utf-8')
 
         if barcode_data == target_barcode:
+            x, y, w, h = barcode.rect 
             # send an indication to the serial port
             if on_rail:
                 return detect_rail(img_frame, gray)
             else:
-                return (detect_bin(img_frame, gray), True)
+                return (y, True)
 
     return (None, False)
 
