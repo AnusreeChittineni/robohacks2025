@@ -40,11 +40,7 @@ def detect_rail(img_frame, grayscale):
         return (distance, True)
 
     else:
-        return (0, False) 
-
-def detect_bin(img_frame, grayscale):
-
-    # returns vertical distance to barcode in tuple (negative if below robot, positive if above)
+        return (0, False)
 
 def detect_barcode(img_frame, target_barcode, on_rail):
 

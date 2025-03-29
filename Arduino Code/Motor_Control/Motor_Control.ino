@@ -1,14 +1,14 @@
-int FRwheelPin1 = 2;
-int FRwheelPin2 = 10;
-int FLwheelPin1 = 3;
-int FLwheelPin2 = 11;
-int BRwheelPin1 = 4;
-int BRwheelPin2 = 12;
-int BLwheelPin1 = 5;
-int BLwheelPin2 = 13;
+int FRwheelPin1 = 4;
+int FRwheelPin2 = 5;
+int FLwheelPin1 = 2;
+int FLwheelPin2 = 3;
+int BRwheelPin1 = 8;
+int BRwheelPin2 = 9;
+int BLwheelPin1 = 6;
+int BLwheelPin2 = 7;
 
-int GearPin1 = 7;
-int GearPin2 = 8;
+int GearPin1 = 12;
+int GearPin2 = 13;
 
 bool commandStarted = false;
 bool onGround = true;

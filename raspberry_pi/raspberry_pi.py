@@ -30,6 +30,7 @@ class Robot():
         self.lineUpThreshold = 5
         self.driftThreshold = 20
         self.heightThreshold = 0.5
+        self.moveUpLoops = 3
 
         self.onRail = False
         self.target_shelf_barcode = 0
@@ -95,9 +96,9 @@ class Robot():
 
     def rail_search(self):
         self.ser.write(b'S')
-        self.ser.write(b'G')
+        self.ser.write(b'R')
 
-        # move to shelf
+        # move to bin
         while True:
             frame = camera.capture_image(self.camera)
             cv2.imshow('Camera Feed', frame)
@@ -107,9 +108,9 @@ class Robot():
                 if (abs(vertical_distance) < self.heightThreshold):
                     break
                 elif (vertical_distance > 0):
-                    self.ser.write(b'D')
-                else:
                     self.ser.write(b'U')
+                else:
+                    self.ser.write(b'D')
             else:
                 self.ser.write(b'U')
 
