@@ -7,3 +7,7 @@ RPi.GPIO
 
 #optical flow sensor packages
 smbus2
+
+# camera packages
+opencv-python
+pyzbar.pyzbar
