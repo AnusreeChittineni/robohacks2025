@@ -35,8 +35,8 @@ void loop() {
     A = move right
     B = move backward
     L = move left
-    G = rotate counterclockwise
-    H = rotate clockwise
+    H = rotate counterclockwise
+    J = rotate clockwise
     U = move up
     D = move down
     E = command ended
@@ -113,7 +113,7 @@ void loop() {
                 digitalWrite(BLwheelPin1, HIGH);
                 digitalWrite(BLwheelPin2, LOW);
             // rotate counterclockwise
-            } else if (comm = 'G') {
+            } else if (comm = 'H') {
                 digitalWrite(FRwheelPin1, LOW);
                 digitalWrite(FRwheelPin2, HIGH);
 
@@ -126,7 +126,7 @@ void loop() {
                 digitalWrite(BLwheelPin1, HIGH);
                 digitalWrite(BLwheelPin2, LOW);
             // rotate clockwse
-            } else if (comm = 'H') {
+            } else if (comm = 'J') {
                 digitalWrite(FRwheelPin1, HIGH);
                 digitalWrite(FRwheelPin2, LOW);
 

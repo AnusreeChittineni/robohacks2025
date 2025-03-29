@@ -65,9 +65,9 @@ class Robot():
                 # detect a drift
                 if (abs(vertical_distance - prev_vertical_distance) > self.driftThreshold):
                     if (vertical_distance > prev_vertical_distance):
-                        self.ser.write(b'G')
-                    else:
                         self.ser.write(b'H')
+                    else:
+                        self.ser.write(b'J')
                 if (hypotenuse > 0):
                     self.ser.write(b'L')
                 else:
@@ -94,8 +94,8 @@ class Robot():
 def __name__ == "__main__":
     rob1 = Robot()
     asin = {
-        "shelf_barcode" : 0;
-        "shelf_height" : 0;
+        "shelf_barcode" : 0,
+        "shelf_height" : 0
     }
     rob1.define_goal(asin)
     rob1.move_to_goal()
