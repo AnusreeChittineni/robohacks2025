@@ -2,8 +2,9 @@ import cv2
 import numpy as np
 from pyzbar.pyzbar import decode
 
-# assume that we are assuming no boxes are the same width as the rail
+# we are assuming no boxes are the same width as the rail
 KNOWN_WIDTH = 5.715  # 2.25 inches in cm
+CAMERA_TO_GEAR = 6.6 # distance from camera to gear in cm
 FOCAL_LENGTH = # camera dependent value
 
 def detect_rail(img_frame, grayscale):
@@ -24,14 +25,22 @@ def detect_rail(img_frame, grayscale):
     for contour in contours:
         x,y,w,h = cv2.boundingRect(contour)
 
-        if w > KNOWN_WIDTH + .2 or w < KNOWN_WIDTH - .2:
+        if w < KNOWN_WIDTH + .2 and w > KNOWN_WIDTH - .2:
             cv2.rectangle(img_frame, (x,y), (x+w, y+h), (0, 255, 0), 2)
             railing_width_px = max(railing_width_px, w)
 
     if railing_width_px > 0:
-        distance = (KNOWN_WIDTH * FOCAL_LENGTH) / railing_width_px
-        # add calculations to adjust distance to the rail
+        if x < 0:
+            if abs(x) > CAMERA_TO_GEAR:
+                distance = -(KNOWN_WIDTH * FOCAL_LENGTH) / railing_width_px
+        else:
+            distance = (KNOWN_WIDTH * FOCAL_LENGTH) / (railing_width_px - x)
+
         # send indication to the serial port
+        return (distance, True)
+
+    else:
+        return (0, False) 
 
 
 def detect_barcode(img_frame, grayscale, target_barcode):
