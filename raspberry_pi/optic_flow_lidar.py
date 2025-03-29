@@ -16,7 +16,7 @@ def read_distance():
         data = bus.read_i2c_block_data(DEVICE_ADDRESS, DISTANCE_REGISTER, 2)
         
         #convert the two bytes to a distance value
-        distance = (data[0] << 8) | data[1]  # assue big-endian format
+        distance = (data[0] << 8) | data[1]  # assume big-endian format
         
         return distance
     
