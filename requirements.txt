@@ -1,0 +1,9 @@
+# setup packages
+serial
+time
+
+# sonar packages
+RPi.GPIO
+
+#optical flow sensor packages
+smbus2
