@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
-from pyzbar.pyzbar import decode
+import cv2.Aruco as aruco
+# from pyzbar.pyzbar import decode
 
 # we are assuming no boxes are the same width as the rail
 KNOWN_WIDTH = 5.715  # 2.25 inches in cm
@@ -43,24 +44,32 @@ def detect_rail(img_frame, grayscale):
         return (0, False) 
 
 
-def detect_barcode(img_frame, target_barcode, on_rail, at_shelf):
-
-     # convert the image to grayscale for better barcode detection
+def detect_aruco_marker(img_frame, target_marker_id, on_rail, at_shelf):
+    # Convert the image to grayscale for better ArUco detection
     gray = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY)
 
-    barcodes = decode(gray)
+    # Define the dictionary to use for detecting ArUco markers (e.g., DICT_4X4_50)
+    aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_50)
+    parameters = aruco.DetectorParameters_create()
 
-    for barcode in barcodes:
-        # corresponding barcode string
-        barcode_data = barcode.data.decode('utf-8')
+    # Detect the markers in the image
+    corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
 
-        if barcode_data == target_barcode:
-            x, y, w, h = barcode.rect 
-            # send an indication to the serial port
-            if on_rail:
-                return detect_rail(img_frame, gray)
-            else:
-                return (y, True)
+    if ids is not None:
+        # Loop through the detected markers
+        for i in range(len(ids)):
+            marker_id = ids[i][0]
+
+            # Check if this marker ID matches the target
+            if marker_id == target_marker_id:
+                # Get the position of the marker
+                x, y, w, h = cv2.boundingRect(corners[i])  # Get bounding box for the marker
+
+                # Send an indication to the serial port
+                if on_rail:
+                    return detect_rail(img_frame, gray)
+                else:
+                    return (y, True)
 
     return (None, False)
 

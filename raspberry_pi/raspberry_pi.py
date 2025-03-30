@@ -7,6 +7,8 @@ import raspberry_pi.sonar as sonar # get_distance(sensor)
 
 import raspberry_pi.camera as camera # capture_image(target_barcode), detect_barcode(img_frame, grayscale, target_barcode)
 
+import cv2.aruco as aruco
+
 # COMMUNICATING WITH ARDUINO:
 #
 # S = command started
@@ -33,8 +35,8 @@ class Robot():
         self.moveUpLoops = 3
 
         self.onRail = False
-        self.target_shelf_barcode = 0
-        self.target_bin_barcode = 0
+        self.target_marker_ids = 0
+        self.target_bin_marker_id = 0
         self.camera = 0
 
         self.ser = serial.Serial("/dev/ttyACM0", 115200, timeout=1)
@@ -43,8 +45,8 @@ class Robot():
         self.ser.setDTR(True)
 
     def define_goal(self, asin):
-        self.target_shelf_barcode = asin["shelf_barcode"]
-        self.target_bin_barcode = asin["bin_barcode"]
+        self.target_shelf_marker_id = asin["shelf_marker_id"]
+        self.target_bin_marker_id = asin["bin_marker_id"]
 
     def move_to_goal(self):
         self.camera = cv2.VideoCapture(0)
@@ -61,7 +63,7 @@ class Robot():
         while True:
             frame = camera.capture_image(self.camera)
             cv2.imshow('Camera Feed', frame)
-            hypotenuse = camera.detect_barcode(frame, self.target_shelf_barcode, self.onRail)
+            hypotenuse = camera.detect_aruco_marker(frame, self.target_shelf_marker_id, self.onRail)
 
             if hypotenuse[1]:
                 lateral_distance = sonar.get_distance("front")
@@ -102,7 +104,7 @@ class Robot():
         while True:
             frame = camera.capture_image(self.camera)
             cv2.imshow('Camera Feed', frame)
-            vertical_distance =  camera.detect_barcode(frame, self.target_bin_barcode, self.onRail)
+            vertical_distance =  camera.detect_aruco_marker(frame, self.target_bin_marker_id, self.onRail)
 
             if (vertical_distance[1]):
                 if (abs(vertical_distance) < self.heightThreshold):
@@ -119,8 +121,8 @@ class Robot():
 if __name__ == "__main__":
     rob1 = Robot()
     asin = {
-        "shelf_barcode" : 0,
-        "bin_barcode" : 0
+        "shelf_barcode" : 0x000E247408100,
+        "bin_barcode" : 0x000E366CA8A00
     }
     rob1.define_goal(asin)
     rob1.move_to_goal()

@@ -195,3 +195,4 @@ void breakAll() {
     digitalWrite(GearPin1, HIGH);
     digitalWrite(GearPin2, HIGH);
 }
+}
