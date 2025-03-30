@@ -1,6 +1,7 @@
-import cv2
 import numpy as np
-import cv2.Aruco as aruco
+import cv2
+from picamera2 import Picamera2
+import time
 # from pyzbar.pyzbar import decode
 
 # we are assuming no boxes are the same width as the rail
@@ -49,11 +50,11 @@ def detect_aruco_marker(img_frame, target_marker_id, on_rail, at_shelf):
     gray = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY)
 
     # Define the dictionary to use for detecting ArUco markers (e.g., DICT_4X4_50)
-    aruco_dict = aruco.Dictionary_get(aruco.DICT_4X4_50)
-    parameters = aruco.DetectorParameters_create()
+    aruco_dict = cv2.aruco.Dictionary_get(aruco.DICT_4X4_50)
+    parameters = cv2.aruco.DetectorParameters_create()
 
     # Detect the markers in the image
-    corners, ids, rejectedImgPoints = aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+    corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
 
     if ids is not None:
         # Loop through the detected markers
@@ -73,16 +74,20 @@ def detect_aruco_marker(img_frame, target_marker_id, on_rail, at_shelf):
 
     return (None, False)
 
-def capture_image(cap):
+def capture_image():
     # cap = cv2.VideoCapture(0)  # Open the default camera
 
-    while True: 
-        ret, frame = cap.read()
-        if not ret:
-            print("Camera failed to capture image")
-            break
+    picam2 = Picamera2()
+    picam2.configure(picam2.create_preview_configuration())
+    picam2.start()
 
-        return frame
+    # Capture a single frame
+    time.sleep(2)  # Allow time for camera initialization
+    frame = picam2.capture_array()
+    print(frame.shape)  # Display shape of captured frame
+
+    picam2.stop()
+    return frame
                
         # camera exits if 'q' is pressed
         #if cv2.waitKey(1) & 0xFF == ord('q'):

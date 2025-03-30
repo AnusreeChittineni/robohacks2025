@@ -1,13 +1,14 @@
-import cv2
 import serial
 import time
 import numpy as np
 
-import raspberry_pi.sonar as sonar # get_distance(sensor)
+import sonar # get_distance(sensor)
 
-import raspberry_pi.camera as camera # capture_image(target_barcode), detect_barcode(img_frame, grayscale, target_barcode)
+import camera # capture_image(target_barcode), detect_barcode(img_frame, grayscale, target_barcode)
 
-import cv2.aruco as aruco
+import cv2
+from picamera2 import Picamera2
+
 
 # COMMUNICATING WITH ARDUINO:
 #
@@ -49,7 +50,9 @@ class Robot():
         self.target_bin_marker_id = asin["bin_marker_id"]
 
     def move_to_goal(self):
-        self.camera = cv2.VideoCapture(0)
+        picam2 = Picamera2()
+        picam2.configure(picam2.create_preview_configuration())
+        self.camera = picam2.start()
         self.ground_search()
         self.rail_search()
         self.camera.release()
@@ -61,7 +64,7 @@ class Robot():
 
         # line up with rail horizontally
         while True:
-            frame = camera.capture_image(self.camera)
+            frame = camera.capture_image()
             cv2.imshow('Camera Feed', frame)
             hypotenuse = camera.detect_aruco_marker(frame, self.target_shelf_marker_id, self.onRail)
 
@@ -102,7 +105,7 @@ class Robot():
 
         # move to bin
         while True:
-            frame = camera.capture_image(self.camera)
+            frame = camera.capture_image()
             cv2.imshow('Camera Feed', frame)
             vertical_distance =  camera.detect_aruco_marker(frame, self.target_bin_marker_id, self.onRail)
 
