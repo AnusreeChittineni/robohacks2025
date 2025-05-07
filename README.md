@@ -1,5 +1,10 @@
 # Crab Bot: Optimizing Vertical Motion for Existing Warehouse Shelving
 
+https://youtu.be/4HDuLfcB2LA
+
+<img width="382" alt="image" src="https://github.com/user-attachments/assets/19ec1b20-e35c-4be8-b279-49ab009df2d3" />
+
+
 ## Inspiration
 The inspiration for CrabBot came from a clear gap we identified in the existing landscape of robotic solutions for distribution centers. Despite major advancements in automation, the vast, towering shelves within these warehouses remain inaccessible to ground-based robots. Existing solutions like Exotec Solutions’ SkyPod and BionicHive’s Squid made vertical mobility possible, but they came with significant limitations: high costs, infrastructure complexity, and a lack of adaptability to diverse warehouse setups. We wanted to design a solution that could overcome these barriers, offering both vertical mobility and a low-cost, easy-to-integrate design. CrabBot was born from this desire to innovate and bridge the gap between technology and practical implementation in real-world environments.
 
