@@ -1,6 +1,6 @@
 # Crab Bot: Optimizing Vertical Motion for Existing Warehouse Shelving
 
-https://youtu.be/4HDuLfcB2LA
+Demo Video: https://youtu.be/4HDuLfcB2LA
 
 <img width="382" alt="image" src="https://github.com/user-attachments/assets/19ec1b20-e35c-4be8-b279-49ab009df2d3" />
 
